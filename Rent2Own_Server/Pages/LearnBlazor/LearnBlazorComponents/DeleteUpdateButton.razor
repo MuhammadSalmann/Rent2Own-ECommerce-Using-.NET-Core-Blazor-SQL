@@ -1,0 +1,51 @@
+﻿@inject IJSRuntime _IJSRuntime
+@if (check)
+{
+<button class="btn btn-warning" @onclick="SuccessToastr">Update</button>
+    <button class="btn btn-danger" @onclick="FailToastr">Delete</button>
+    <button class="btn btn-primary" @onclick="ShowConfirmBox">Click me</button>
+    <button class="btn btn-warning" @onclick="SweetSuccess">Success Sweet Alert</button>
+    <button class="btn btn-danger" @onclick="SweetFail">Fail Sweet Alert</button>
+    @if (checker)
+    {
+        <p>Confirmed</p>
+    } else
+    {
+        <p>Not Confirmed</p>
+    }
+    @if (content != null)
+    {
+        <span>@content</span>
+    }
+}
+
+@code {
+    [Parameter]
+    public bool check{ get; set; }
+    [Parameter]
+    public RenderFragment content { get; set; }
+
+    public string message{ get; set; } = "Are You Sure to Click this btn";
+    public bool checker { get; set; }
+
+    public async Task ShowConfirmBox()
+    {
+        checker = await _IJSRuntime.InvokeAsync<bool>("confirm",message);
+    }
+    public async Task SuccessToastr()
+    {
+        await _IJSRuntime.ToastrSuccess("Success");
+    }
+    public async Task FailToastr()
+    {
+        await _IJSRuntime.ToastrError("Error");
+    }
+    public async Task SweetSuccess()
+    {
+        await _IJSRuntime.InvokeVoidAsync("ShowSwal", "success", "Opration Successful");
+    }
+    public async Task SweetFail()
+    {
+        await _IJSRuntime.InvokeVoidAsync("ShowSwal", "error", "Opration Failed");
+    }
+}

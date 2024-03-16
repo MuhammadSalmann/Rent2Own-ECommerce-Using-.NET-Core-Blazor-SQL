@@ -1,0 +1,54 @@
+﻿@inject ISyncLocalStorageService _localStorage
+@inject ICartService _cartService
+@implements IDisposable
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+        <a class="navbar-brand" href="index.html">R<span>2O</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+            <ul class="navbar-nav m-auto">
+                <li class="nav-item active"><a href="" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/shop" class="nav-link">Shop</a></li>
+                <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
+                <AuthorizeView>
+                    <NotAuthorized>
+                        <li class="nav-item"><a href="/register" class="nav-link">Register</a></li>
+                        <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+                    </NotAuthorized>
+                    <Authorized>
+                        <span class="p-2">
+                            Hello, @context.User.Identity.Name
+                        </span>
+                        <li class="nav-item"><a href="/logout" class="nav-link">Logout</a></li>
+                    </Authorized>
+                </AuthorizeView>
+            </ul>
+        </div>
+        <a class="navbar-brand" href="/cart"><i class="bi bi-cart"></i> (@GetCartCount())</a>
+    </div>
+</nav>
+
+@code{
+    protected override void OnInitialized()
+    {
+        _cartService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        _cartService.OnChange -= StateHasChanged;
+    }
+
+    private int GetCartCount(){
+        var cart = _localStorage.GetItem<List<ShoppingCart>>(SD.ShoppingCart);
+        return cart==null ? 0 : cart.Count;
+    }
+}

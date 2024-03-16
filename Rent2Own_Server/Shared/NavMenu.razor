@@ -1,0 +1,115 @@
+﻿<aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+            <a href="/" class="text-nowrap logo-img">
+                <img src="/assets/images/logos/logo.png" class="mt-2"  width="150" alt="" />
+            </a>
+            <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                <i class="ti ti-x fs-8"></i>
+            </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+            <ul id="sidebarnav">
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Home</span>
+                </li>
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="" aria-expanded="false" Match="NavLinkMatch.All">
+                        <span>
+                            <i class="ti ti-layout-dashboard"></i>
+                        </span>
+                        <span class="hide-menu">Dashboard</span>
+                    </NavLink>
+                </li>
+                @* <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/learnBlazor/bindProp">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Bind Prop
+                </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/learnBlazor/demoproduct">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Demo Product
+                </NavLink>
+                </div> *@
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">MANAGEMENT</span>
+                </li>
+                <AuthorizeView Roles="@roleAdmin">
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="/category" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-article"></i>
+                        </span>
+                        <span class="hide-menu">Categories</span>
+                    </NavLink>
+                </li>
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="/product" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-typography"></i>
+                        </span>
+                        <span class="hide-menu">Products</span>
+                    </NavLink>
+                </li>
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="/orderlist" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-cards"></i>
+                        </span>
+                        <span class="hide-menu">Orders</span>
+                    </NavLink>
+                </li>
+                </AuthorizeView>
+
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">AUTH</span>
+                </li>
+                <AuthorizeView>
+                <Authorized>
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="Identity/Account/Logout" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-login"></i>
+                        </span>
+                        <span class="hide-menu">Logout</span>
+                    </NavLink>
+                </li>
+                </Authorized>
+                <NotAuthorized>
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="Identity/Account/Login" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-login"></i>
+                        </span>
+                        <span class="hide-menu">Login</span>
+                    </NavLink>
+                </li>
+                <li class="sidebar-item">
+                    <NavLink class="sidebar-link" href="Identity/Account/Register" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-user-plus"></i>
+                        </span>
+                        <span class="hide-menu">Register</span>
+                    </NavLink>
+                </li>
+                </NotAuthorized>
+                </AuthorizeView>
+            </ul>
+
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>
+
+
+
+@code {
+    private string roleAdmin = Rent2Own_Common.SD.Role_Admin;
+
+}

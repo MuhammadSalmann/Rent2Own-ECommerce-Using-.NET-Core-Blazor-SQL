@@ -1,0 +1,176 @@
+﻿@page "/product/create"
+@page "/product/edit/{id:int}"
+@inject NavigationManager _navigationManager
+@inject IFileUpload _fileUpload
+@inject IJSRuntime _jsRuntime
+@attribute [Authorize]
+
+<div class="row">
+    <h3 class="card-title text-primary mb-3 ml-3">@Title Product</h3>
+    <div class="col-10">
+        @if (IsLoading)
+        {
+             <div class="text-center">
+                <img src="/images/loading.gif">
+                    </div>
+        }
+        else{
+        <EditForm Model="product" OnValidSubmit="UpsertProduct">
+            <DataAnnotationsValidator/>
+            @*<ValidationSummary/>*@
+            <div class="form-group">
+                <label>Name</label>
+                    <InputText @bind-Value="product.Name" class="form-control"></InputText>
+                    <ValidationMessage For="()=>product.Name"></ValidationMessage>
+            </div>
+             <div class="form-group">
+                <label>Model</label>
+                    <InputNumber @bind-Value="product.Model" class="form-control"></InputNumber>
+                    <ValidationMessage For="()=>product.Model"></ValidationMessage>
+            </div>
+                <div class="form-group">
+                    <label>Company</label>
+                    <InputText @bind-Value="product.Company" class="form-control"></InputText>
+                    <ValidationMessage For="()=>product.Company"></ValidationMessage>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <SfRichTextEditor @bind-Value="product.Description"></SfRichTextEditor>
+                    <ValidationMessage For="()=>product.Description"></ValidationMessage>
+                </div>
+
+            <div class="row pt-3">
+                <div class="form-group col-6">
+                <div class="form-check">
+                    <InputCheckbox @bind-Value="product.ShopFavorites" class="form-check-input"></InputCheckbox>
+                    <label class="form-check-label">Is Shop Favorites</label>
+                </div>
+                </div>
+                <div class="form-group col-6">
+                <div class="form-check">
+                            <InputCheckbox @bind-Value="product.CustomerFavorites" class="form-check-input"></InputCheckbox>
+                    <label class="form-check-label">Is Customer Favorites</label>
+                </div>
+                </div>
+                 <div class="form-group col-6">
+                     <label>Category</label>
+                        <InputSelect @bind-Value="product.CategoryId" class="form-select">
+                        <option value="0" disabled="disabled" selected>--Select Category--</option> 
+                            @foreach(var cat in Categories)
+                            {
+                                <option value="@cat.Id">@cat.Name</option>
+                            }
+
+                    </InputSelect>
+                        <ValidationMessage For="()=>product.CategoryId"></ValidationMessage>
+                </div>
+                <div class="form-group pt-4 col-6">
+                    <InputFile OnChange="HandleImageUpload"></InputFile>
+                </div>
+            </div>
+              
+            <div class="form-group py-2">
+                <button class="btn btn-primary">@Title</button>
+                <NavLink href="product" class="btn btn-secondary">Back to Index</NavLink>
+            </div>
+        </EditForm>
+        }
+    </div>
+    <div class="col-md-2">
+        <img src="@product.ImageUrl" class="w-100">
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Product product { get; set; } = new Product()
+    {
+            ImageUrl = "/images/default.png"
+    };
+    public List<Category> Categories { get; set; } = new List<Category>();
+    private string Title { get; set; } = "Create";
+    public bool IsLoading { get; set; } = true;
+    public string OldImageUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == 0)
+        {
+            //create
+            IsLoading = false;
+        }
+        else
+        {
+            //update
+            Title = "Update";
+        }
+        await Task.Run(LoadProduct);
+    }
+
+    public void LoadProduct()
+    { 
+        Categories = CategoryOperations.GetAll();
+        if(Id!=0)
+        {
+            product = ProductOperations.Get(Id);
+            OldImageUrl = product.ImageUrl;
+        }
+        IsLoading = false;
+    }
+
+    public void UpsertProduct()
+    {
+        if (product.Id == 0)
+        {
+            //create
+            ProductOperations.Create(product);
+             _jsRuntime.ToastrSuccess("Product Created successfully.");
+        }
+        else
+        {
+            if (OldImageUrl != product.ImageUrl)
+            {
+                _fileUpload.DeleteFile(OldImageUrl);
+
+            }
+            //update
+            ProductOperations.Update(product);
+             _jsRuntime.ToastrSuccess("Product Updated successfully.");
+        }
+        _navigationManager.NavigateTo("product");
+    }
+
+    private async Task HandleImageUpload(InputFileChangeEventArgs e)
+    {
+        IsLoading = true;
+        try
+        {
+            if (e.GetMultipleFiles().Count > 0)
+            {
+                foreach (var file in e.GetMultipleFiles())
+                {
+                    System.IO.FileInfo fileInfo = new System.IO.FileInfo(file.Name);
+                    if (fileInfo.Extension.ToLower() == ".jpg" ||
+                      fileInfo.Extension.ToLower() == ".png" ||
+                      fileInfo.Extension.ToLower() == ".jpeg")
+                    {
+                        product.ImageUrl = await _fileUpload.UploadFile(file);
+                    }
+                    else
+                    {
+                        await _jsRuntime.ToastrError("Please select .jpg/.jpeg/.png file only");
+                        return;
+                    }
+                }
+            }
+            IsLoading = false;
+        }
+        catch (Exception ex)
+        {
+            await _jsRuntime.ToastrError(ex.Message);
+        }
+    }
+}

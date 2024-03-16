@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\css\css\**" />
+    <Compile Remove="wwwroot\scss\**" />
+    <Content Remove="wwwroot\css\css\**" />
+    <Content Remove="wwwroot\scss\**" />
+    <EmbeddedResource Remove="wwwroot\css\css\**" />
+    <EmbeddedResource Remove="wwwroot\scss\**" />
+    <None Remove="wwwroot\css\css\**" />
+    <None Remove="wwwroot\scss\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\img\about-hero.svg" />
+    <None Include="wwwroot\assets\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\assets\js\custom.js" />
+    <None Include="wwwroot\assets\js\jquery-1.11.0.min.js" />
+    <None Include="wwwroot\assets\js\jquery-migrate-1.2.1.min.js" />
+    <None Include="wwwroot\assets\js\slick.min.js" />
+    <None Include="wwwroot\assets\js\templatemo.js" />
+    <None Include="wwwroot\assets\js\templatemo.min.js" />
+    <None Include="wwwroot\assets\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\assets\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\assets\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\assets\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\assets\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\assets\webfonts\fa-solid-900.woff2" />
+    <None Include="wwwroot\assets\webfonts\slick.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.23" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.24" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.24" PrivateAssets="all" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rent2Own_Common\Rent2Own_Common.csproj" />
+    <ProjectReference Include="..\Rent2Own_Models\Rent2Own_Models.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Stripe.net" Version="43.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Rent2Own_Common\Rent2Own_Common.csproj" />
+    <ProjectReference Include="..\Rent2Own_DataAccess\Rent2Own_DataAccess.csproj" />
+    <ProjectReference Include="..\Rent2Own_Models\Rent2Own_Models.csproj" />
+  </ItemGroup>
+
+</Project>
