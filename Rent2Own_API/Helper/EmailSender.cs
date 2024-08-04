@@ -20,7 +20,7 @@ namespace Rent2Own_API.Helper
                 //send email
                 using var emailClient = new SmtpClient();
                 emailClient.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                emailClient.Authenticate("salmansidd372@gmail.com", "dmdy hbtu zfij bffr");
+                emailClient.Authenticate("salmansidd372@gmail.com", "your passskey");
                 emailClient.Send(emailToSend);
                 emailClient.Disconnect(true);
             }
